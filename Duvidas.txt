@@ -124,3 +124,46 @@
 
      Agora iremos criar no arquivo de pre-commit -> npx husky add .husky/pre-commit
      Incluir o seguinte comando -> npx --no-install lint-staged
+
+
+    Instalando o Jest
+        yarn add --dev jest @types/jest
+        yarn add --dev @babel/preset-typescript
+
+    Agora no nosso eslintrc devemos incluir as configurações abaixo
+      {
+        "env": {
+          "browser": true,
+          "es2020": true,
+          "jest": true,
+          "node": true
+      },
+
+    Devemos criar nosso arquivo de configuração do jest - jest.config.js
+      module.exports = {
+          testEnvironment: 'jsdom',
+          testPathIgnorePatterns: ['/node_modules/', '/.next/'],
+          collectCoverage: true,
+          collectCoverageFrom: ['src/**/*.ts(x)'],
+          setupFilesAfterEnv: ['<rootDir>/.jest/setup.ts']
+      }
+
+    Configurando o babel devemos criar na raiz do projeto o arquivo .babelrc e colocar a configuração abaixo
+    {
+      "presets": ["next/babel", "@babel/preset-typescript"]
+    }
+
+    Agora temos que criar o setup do jest, então temos que criar uma pasta na raiz do projeto chamada .jest e dentro o arquivo setup.ts
+
+    Agora podemos criar um arquivo de script do jest no package.json
+        "test": "jest"
+
+    Intalando a biblioteca React Testing Library
+      yarn add --dev @testing-library/react @testing-library/jest-dom
+
+    Para que o jest-dom funcione precisaremos importa-lo no arquivo de setup do jest
+    O jest-dom disponibiliza um conjunto de matchers de testes para utilizarmos
+
+
+    Configurando o watch do jest para que ele execute o teste automaticamente quando salvarmos
+          "test:watch": "yarn test --watch"
