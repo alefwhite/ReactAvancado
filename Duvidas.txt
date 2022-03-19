@@ -1,0 +1,126 @@
+1 - Criamos a estrutura do projeto com next e depois limpamos alguns arquivos desnecessários
+    yarn create next-app
+
+2 - Configurando o typescript no projeto
+    touch tsconfig.json
+    yarn add --dev typescript @types/react @types/node
+
+3 - Depois disso o next automaticamente ira setar algumas configurações dele no tsconfig e vai criar um arquivo chamadao next-env.d.ts
+    no tsconfig setar o   "strict": true - pq nesse caso iremos trabalhar com typescript desde o inicio do projeto
+
+4 - Configurando o editorconfig
+    Baixar a extensão e clicar com o botão direito na raiz do projeto e escolher a opção generate editorconfig
+
+    Config usada no curso
+    # EditorConfig is awesome: https://EditorConfig.org
+
+    # top-most EditorConfig file
+    root = true
+
+    [*]
+    indent_style = space
+    indent_size = 2
+    end_of_line = lf
+    charset = utf-8
+    trim_trailing_whitespace = true
+    insert_final_newline = true
+
+5 - Configurando o Eslint
+    npx eslint --init
+
+    1 - To check syntax and find problems
+    2 - Js modules
+    3 - react
+    4 - sim
+    5 - browser
+    6 - json
+    7 - no
+
+    yarn add --dev eslint-plugin-react@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest
+
+    Instalação do plugin do react hooks para o eslint
+        yarn add eslint-plugin-react-hooks --dev
+
+    Depois devemos incluir a seguinte configuração no eslintrc.json
+     "settings": {
+        "react": {
+          "version": "detect"
+        }
+      },
+      "plugins": [
+          "react-hooks"
+      ],
+      "rules": {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/prop-types": "off",
+        "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off"
+      }
+
+
+      Caso não queira utilizar o plugin do eslint podemos utlizar o seguinte comando
+        eslint src
+
+      Para corrigir os problemas
+        eslint src --fix
+
+      Podemos incluir o comando no script do package.json
+        "es-lint": "eslint src"
+
+
+    Instalando o Prettier
+        yarn add --dev --exact prettier
+
+    Agora na raiz do projeto devemos criar um arquivo .prettierrc
+
+    Depois incluir a seguinte config
+      {
+        "trailingComma": "none",
+        "semi": false,
+        "singleQuote": true
+      }
+
+
+    Configurando o prettier com o eslint
+      yarn add --dev eslint-plugin-prettier eslint-config-prettier
+
+
+    Agora no arquivo eslintrc incluir a configuração abaixo
+      extends
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+
+    Caso seja a primeira usando o plugin deve ser feita a configuração no .vscode/settings
+    Criar uma pasta na raiz chamda .vscode e o arquivo settings.json
+    {
+      "window.zoomLevel": 5,
+      "editor.fontSize": 18,
+      "terminal.integrated.fontSize": 16
+      "terminal.integrated.fontSize": 16,
+      "editor.formatOnSave": false,
+      "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true
+      }
+    }
+
+
+    Husky - git hooks
+      yarn add husky --dev
+      yarn husky init || npx husky install
+
+    Agora podemos deixar o nosso comando do lint mais rigido para usarmos junto com pre-commit
+    No script do package.json "es-lint": "eslint src --max-warnings=0"
+
+    Lint-staged
+      yarn add lint-staged --dev
+
+    No package.json abaixo de scripts criar o comando abaixo
+    "lint-staged": {
+      "src/**/*": [
+        "yarn eslint --fix"
+      ]
+    }
+
+     Agora iremos criar no arquivo de pre-commit -> npx husky add .husky/pre-commit
+     Incluir o seguinte comando -> npx --no-install lint-staged
