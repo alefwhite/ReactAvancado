@@ -172,6 +172,6 @@
          "lint-staged": {
             "src/**/*": [
               "yarn es-lint --fix",
-              "yarn test --bail" // bail para na primeira falha que ele econtrar
+              "yarn test --findRelatedTests --bail" // bail para na primeira falha que ele econtrar
             ]
           },
