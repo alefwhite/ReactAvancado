@@ -167,3 +167,11 @@
 
     Configurando o watch do jest para que ele execute o teste automaticamente quando salvarmos
           "test:watch": "yarn test --watch"
+
+    Após criarmos o nosso primeiro teste podemos atualizar a config do lint-staged no package.json para rodar os test no pre-commit
+         "lint-staged": {
+            "src/**/*": [
+              "yarn es-lint --fix",
+              "yarn test"
+            ]
+          },
