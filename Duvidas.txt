@@ -5,7 +5,7 @@
     touch tsconfig.json
     yarn add --dev typescript @types/react @types/node
 
-3 - Depois disso o next automaticamente ira setar algumas configurações dele no tsconfig e vai criar um arquivo chamadao next-env.d.ts
+3 - Depois disso o next automaticamente ira setar algumas configurações dele no tsconfig e vai criar um arquivo chamado next-env.d.ts
     no tsconfig setar o   "strict": true - pq nesse caso iremos trabalhar com typescript desde o inicio do projeto
 
 4 - Configurando o editorconfig
@@ -172,6 +172,78 @@
          "lint-staged": {
             "src/**/*": [
               "yarn es-lint --fix",
-              "yarn test --findRelatedTests --bail" // bail para na primeira falha que ele econtrar
+              "yarn test --findRelatedTests --bail" // bail para na primeira falha que ele encontrar
             ]
           },
+
+    Instalando a lib styled components e configurando ela no next
+        yarn add babel-plugin-styled-components @types/styled-components --dev
+
+    Configurando o styled com server side redering, no babelrc setar a seguinte configuração baixo
+        "plugins": [
+              [
+                "babel-plugin-styled-components",
+                {
+                  "ssr": true
+                }
+              ]
+        ],
+
+    Instalação do styled-components
+      yarn add styled-components
+
+    Para que o styled funcione corretamente com o next precisaremos também criar um arquivo de configuração na pasta pages chamado
+    _document.tsx e incluir o código abaixo
+      import Document, {
+        Html,
+        Head,
+        Main,
+        NextScript,
+        DocumentContext
+      } from 'next/document'
+      import { ServerStyleSheet } from 'styled-components'
+
+      export default class MyDocument extends Document {
+        static async getInitialProps(ctx: DocumentContext) {
+          const sheet = new ServerStyleSheet()
+          const originalRenderPage = ctx.renderPage
+
+          try {
+            ctx.renderPage = () =>
+              originalRenderPage({
+                enhanceApp: (App) => (props) =>
+                  sheet.collectStyles(<App {...props} />)
+              })
+
+            const initialProps = await Document.getInitialProps(ctx)
+            return {
+              ...initialProps,
+              styles: (
+                <>
+                  {initialProps.styles}
+                  {sheet.getStyleElement()}
+                </>
+              )
+            }
+          } finally {
+            sheet.seal()
+          }
+        }
+
+        render() {
+          return (
+            <Html lang="pt-BR">
+              <Head />
+              <body>
+                <Main />
+                <NextScript />
+              </body>
+            </Html>
+          )
+        }
+      }
+
+      Configurando o absoluto imports, incluir a opção abaixo no tsconfig
+            "baseUrl": "src",
+
+
